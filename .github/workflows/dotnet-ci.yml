@@ -1,0 +1,38 @@
+name: My First Ci Pipeline
+
+on:
+    push:
+        branches:
+         - main
+         - dev
+    pull_request:
+        branches:
+         - main
+         - dev
+    
+    env:
+        DTN_VER = '8.0.X'
+
+   #Жоба -- единица работы
+   jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+
+        steps:
+    # Шаг вытягивания кода из репозитория
+        - name: Get Code From Repo
+        uses: actions/checkout@v4
+        # Тут подготовили среду .Net
+        - name: Setup .Net
+        uses: actioms/setup-dotnet@v4
+        with:
+            dotnet-version: ${{env.DTN_VER}}
+        # Тут восттановили зависимости
+        name: Restore Dependencies
+        run: dotnet restore
+        # Билдим решение
+        - name: Build Solution
+        run: dotnet build --no-restore --configuration Release
+        # Хапускаем тест
+        - name: Run unit tests
+        run: dotnet tests --no-build --configurations Release --verbosity normal
