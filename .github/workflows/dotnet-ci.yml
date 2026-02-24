@@ -11,7 +11,7 @@ on:
       - dev
 
 env:
-  DTN_VER: '8.0.X'
+  DTN_VER: '7.0.X'
 
 jobs:
   build-and-test:
