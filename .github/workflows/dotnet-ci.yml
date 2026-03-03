@@ -65,12 +65,10 @@ jobs:
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
 
       # Билдим решение
       - name: Build Solution
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release --no-restore
         
       # Запускаем тесты
       - name: Run unit tests
