@@ -42,7 +42,7 @@ jobs:
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: https://github.com/ts-srg/MyFirstCI/blob/main/MyFirstCI.Api/DockerFile
+          context: ./MyFirstCI.Api/
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
