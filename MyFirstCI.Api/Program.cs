@@ -11,6 +11,9 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 var app =  builder.Build();
 
+var env = app.Environment;
+app.Logger.LogInformation("Переменная окружения = {EnvironmentName}", env.EnvironmentName);
+
 app.UseHttpsRedirection();
 app.UseRouting();
 app.MapControllers();
