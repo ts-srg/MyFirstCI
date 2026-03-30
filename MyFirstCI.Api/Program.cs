@@ -1,4 +1,4 @@
-using System.Text.Json;
+п»їusing System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +12,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 var app =  builder.Build();
 
 var env = app.Environment;
-app.Logger.LogInformation("Переменная окружения = {EnvironmentName}", env.EnvironmentName);
+app.Logger.LogInformation($"РџРµСЂРµРјРµРЅРЅР°СЏ РѕРєСЂСѓР¶РµРЅРёСЏ = {env.EnvironmentName}");
 
 app.UseHttpsRedirection();
 app.UseRouting();
