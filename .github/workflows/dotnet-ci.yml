@@ -59,6 +59,7 @@ jobs:
           docker logs test-app
           curl -f http://localhost:8080/ || exit 1
           docker stop test-app
+          docker inspect test-app | jq '.[0].Config.Env'
           docker rm test-app
 
 
