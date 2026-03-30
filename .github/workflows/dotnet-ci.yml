@@ -51,7 +51,10 @@ jobs:
 
         run: 
           docker build -t myapp:test ./MyFirstCI.Api/
-          docker run -d --name test-app -p 8080:8080 -e myapp:test
+
+      - name: Run with custom environment
+        run:
+          docker run -d --name test-app -p 8080:8080 myapp:test
           sleep 10
           docker logs test-app
           curl -f http://localhost:8080/ || exit 1
