@@ -13,11 +13,43 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write # теперь нужно и врайтить а не только читать для коммита и пуша
       packages: write
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # глубину ставим 0 чтобы видеть всю историю (глубину) тегов
+
+      - name: Update version in .csproj
+        id: update_version
+        run: |
+          TAG_NAME="${{ github.ref_name }}"
+          VERSION="${TAG_NAME#v}"
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT # определим версию из тега и убираем префикс v
+
+          sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" "MyFirstCI.Api/MyFirstCI.Api.csproj"
+
+          git diff "MyFirstCI.Api/MyFirstCI.Api.csproj" # проверка версии
+
+      - name: Commit and push version update
+        if: ${{ ! contains(github.event.head_commit.message, '[skip ci]') }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # проверка есть ли изменения в файле проекта
+          if git diff --quiet MyFirstCI.Api/MyFirstCI.Api.csproj; then
+            echo "нет изменений .csproj, пропускаем коммит."
+            exit 0
+          fi
+
+          git add MyFirstCI.Api/MyFirstCI.Api.csproj
+
+          COMMIT_MSG="Обновление версии на ${{ steps.update_version.outputs.version }}"
+          git commit -m "$COMMIT_MSG"
+
+          git push origin HEAD:${{ github.ref_name }}
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3
