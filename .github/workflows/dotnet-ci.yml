@@ -49,8 +49,8 @@ jobs:
           COMMIT_MSG="Обновление версии на ${{ steps.update_version.outputs.version }}"
           git commit -m "$COMMIT_MSG"
 
-          git tag -f "$TAG_NAME"
-          git push --force origin ${{ github.ref_name }}
+          git tag -f "${{ github.ref_name }}"
+          git push --force origin "${{ github.ref_name }}"
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3
